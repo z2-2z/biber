@@ -5,7 +5,7 @@ Biber (german for "beaver") is a static website generator.
 It generates a complete blog from a serious of `.post` files,
 each describing one blog post.
 The `.post` files must follow a custom format but mainly consist
-of Commonmark content that can be extended with custom plugins.
+of markdown content that can be extended with custom plugins.
 
 Biber is not a general purpose website generator, it only generates
 my blog how I want it.
@@ -97,7 +97,7 @@ attachment: <list of filenames>
 - `attachment`: A list of files that shall be copied into the post directory under the webroot. Normally only referenced images are copied. __(optional)__
 
 ### Markdown Content
-After the metadata lines you can write markdown as you are used to do.
+After the metadata lines you can write markdown as you are used to.
 But note that the first markdown element must be a h1 heading (`#`). This will denote the title of the blog post, as displayed in the
 index. 
 
@@ -128,4 +128,4 @@ In the example above `flags` would have the value:
 ### Biber API
 Biber offers some convenience functions for plugins:
 - `class PluginError`: raise this exception instead of builtin exceptions when something goes wrong
-- `md_to_html(md)`: Gets a single parameter `md` that holds some markdown and returns the rendered HTML for it
+- `md_to_html(md)`: Converts markdown content in `md` to HTML
