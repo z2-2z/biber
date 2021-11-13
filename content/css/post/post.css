@@ -1,0 +1,87 @@
+.post-root {
+    max-width: 720px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.post-figure img {
+  max-width: 100%;
+}
+
+.post-quote {
+  border-left: 3px solid #555;
+  padding-left: 0.75em;
+  margin-left: 0.25em;
+  font-style: italic;
+}
+
+.post-figure-description {
+  padding-top: 0.25em;
+  padding-left: 0.25em;
+  margin-bottom: 0;
+  color: white;
+}
+
+.post-figure {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+::-moz-selection {
+  color: black;
+  background: rgba(255, 255, 0, 0.75);
+}
+
+::selection {
+  color: black;
+  background: rgba(255, 255, 0, 0.75);
+}
+
+.unselectable {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+code *::-moz-selection, code *::selection {
+  color: black;
+  background-color: white;
+}
+code::-moz-selection, code::selection {
+  color: black;
+  background-color: white;
+}
+
+h2 {
+  text-align: center;
+  border-bottom: 1px solid white;
+}
+
+.title-container {
+  margin-top: 1em;
+  margin-bottom: 1.25em;
+}
+
+.post-footer {
+  border-top: 1px solid white;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.post-footer span {
+  padding-top: 0.1em;
+  padding-bottom: 1em;
+  text-align: center;
+}
+
+.post-latex * {
+  font-size: 100%;
+}
+
+thead td {
+  font-size: 1.1em;
+}
