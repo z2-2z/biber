@@ -1,6 +1,8 @@
 import os
 import shutil
 
+from . import pgp
+
 mode = 0o750
 dirs = {
     "content/css" : "css",
@@ -27,3 +29,8 @@ def create_standard_dirs(biber_dir, config):
         recursive_copy(src_dir, dst_dir)
     
     os.makedirs(os.path.join(config.get_blog("out"), "keys"), mode=mode, exist_ok=True)
+    
+    for type, url, _ in config.get_socials():
+        if type == "PGP":
+            fpr = url.split("/")[1].split(".")[0]
+            pgp.dump_public_key(config, os.path.join(config.get_blog("out"), url), fpr)

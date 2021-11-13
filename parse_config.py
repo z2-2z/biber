@@ -1,8 +1,6 @@
 import os
 import configparser
 
-from . import pgp
-
 required_pgp_settings = [
     "key"
 ]
@@ -122,10 +120,5 @@ def parse_config(biber_dir, filename):
             
     if not ret.has_blog():
         raise ConfigError(f"The section 'Blog' is required but not set in the configuration file")
-    
-    for type, url, _ in ret.get_socials():
-        if type == "PGP":
-            fpr = url.split("/")[1].split(".")[0]
-            pgp.dump_public_key(ret, os.path.join(ret.get_blog("out"), url), fpr)
         
     return ret
