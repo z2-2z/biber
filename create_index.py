@@ -1,4 +1,8 @@
 import os
+import datetime
+
+class FeedError(Exception):
+    pass
 
 HTML_DOC = """\
 <!DOCTYPE html>
@@ -10,6 +14,7 @@ HTML_DOC = """\
         <link rel="stylesheet" href="css/bootstrap.css"/>
         <link rel="stylesheet" href="css/general.css"/>
         <link rel="stylesheet" href="css/index/index.css"/>
+        {feed_meta}
         <script src="js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
@@ -48,13 +53,59 @@ HTML_POST = """\
 </tr>
 """
 
+def create_feed(link, config, posts):
+    feed_size = config.get_blog("feed-size")
+    now = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
+    out_file = os.path.join(config.get_blog("out"), link)
+    
+    with open(out_file, "w") as feed:
+        feed.write(f"""<?xml version="1.0" encoding="UTF-8" ?>
+            <rss version="2.0">
+                <channel>
+                    <title>{config.get_blog("title")}</title>
+                    <description></description>
+                    <lastBuildDate>{now}</lastBuildDate>
+                    <link>{config.get_blog("feed-domain")}</link>
+                    <pubDate>{now}</pubDate>
+                    <generator>biber</generator>
+        """)
+        
+        for i in range(min(feed_size, len(posts))):
+            date = posts[i].get_date().astimezone(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
+            link = os.path.join(config.get_blog("feed-domain"), "posts", str(posts[i].id), "index.html")
+            feed.write(f"""\
+                    <item>
+                        <title>{posts[i].get_title()}</title>
+                        <description><a href="{link}">{posts[i].get_title()}</a></description>
+                        <pubDate>{date}</pubDate>
+                        <link>{link}</link>
+                        <guid isPermaLink="false">{posts[i].id}</guid>
+                        <category>{posts[i].get_category()}</category>
+                        <author>{posts[i].get_author()}</author>
+                    </item>
+            """)
+        
+        feed.write("""
+                </channel>
+            </rss>
+        """)
+
 def create_index(config, posts):
     index_html = os.path.join(config.get_blog("out"), "index.html")
     socials = []
     table = []
     max_size = 0
+    feed_meta = ""
     
-    for _, link, img in config.get_socials():
+    for type, link, img in config.get_socials():
+        if type == "RSS":
+            if config.get_blog("feed-domain") is None:
+                continue
+            
+            create_feed(link, config, posts)
+            href = f"{config.get_blog('feed-domain')}/feed.xml"
+            feed_meta = f"""<link rel="alternate" type="application/rss+xml" href="{href}" title="{config.get_blog('title')}"/>"""
+            
         socials.append(HTML_SOCIAL.format(link=link, image=img))
     
     for post in posts:
@@ -77,5 +128,6 @@ def create_index(config, posts):
         f.write(HTML_DOC.format(
             blog_title=config.get_blog("title"),
             socials="".join(socials),
-            posts="".join(table)
+            posts="".join(table),
+            feed_meta=feed_meta
         ))

@@ -39,12 +39,17 @@ in: path/to/post/files
 out: path/to/webroot
 title: My Blog Title
 plugins: path/to/folder/with/plugins
+feed-domain: https://your.domain
+feed-size: <number>
 ```
 
 - `in`: Folder with `.post` files. Subfolders are also scanned. __(mandatory)__
 - `out`: This is the folder where the resuling html files will be stored __(mandatory)__
 - `title`: The title of your blog as it will be displayed on the index file __(mandatory)__
 - `plugins`: Specifies a folder where custom plugins are located. See more about plugins below. __(optional)__
+- `feed-domain`: If this option is specified an RSS feed will be generated. To build the feed
+  it is necessary to know where the blog will be hosted. Put the URL to your blog there. __(optional)__
+- `feed-size`: Controls how many items shall appear in the RSS feed (default: 25). __(optional)__
 
 ### The `Socials` section
 Here you can specify how you can be reached. The entire section is optional.

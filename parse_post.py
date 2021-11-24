@@ -91,7 +91,7 @@ class Post:
     
     def set_date(self, date):
         day, month, year = map(int, date.split("."))
-        self._date = datetime.datetime(year, month, day)
+        self._date = datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
         
     def set_category(self, cat):
         self._category = cat.upper()

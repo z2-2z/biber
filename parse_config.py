@@ -13,7 +13,8 @@ enabled_socials = {
     "hackerone" : ("HackerOne", "https://hackerone.com/{handle}?type=user", "img/hackerone.png"),
     "github" :    ("Github",    "https://github.com/{handle}",              "img/github.png"),
     "twitter":    ("Twitter",   "https://twitter.com/{handle}",             "img/twitter.png"),
-    "pubkey":     ("PGP",       "keys/{handle}.asc",                        "img/email.png")
+    "pubkey":     ("PGP",       "keys/{handle}.asc",                        "img/email.png"),
+    "rss" :       ("RSS",       "feed.xml",                                 "img/feed.png")
 }
 
 class ConfigError(Exception):
@@ -44,7 +45,9 @@ class Config:
         return self._blog[key]
 
 def parse_section_socials(biber_dir, section):
-    ret = []
+    ret = [
+        enabled_socials["rss"]
+    ]
     
     for key in section:
         value = section[key]
@@ -86,7 +89,9 @@ def parse_section_blog(section):
         "in" : None,
         "out" : None,
         "title" : None,
-        "plugins" : None
+        "plugins" : None,
+        "feed-size" : 25,
+        "feed-domain" : None
     }
     
     for key in section:
@@ -94,6 +99,9 @@ def parse_section_blog(section):
             raise ConfigError(f"Invalid value in Blog section: '{key}'")
             
         blog[key] = section[key]
+        
+        if key == "feed-size":
+            blog[key] = int(blog[key])
     
     for req in required_blog_settings:
         if blog[req] is None:
