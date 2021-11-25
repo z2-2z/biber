@@ -35,7 +35,7 @@ HTML_DOC = """\
     <body>
         <div class="post-root container-fluid">
             <div class="title-container">
-                <h2 id="post-title">{post_title}</h2>
+                <h3 id="post-title">{post_title}</h3>
             </div>
             <div class="post-content">
                 {post_content}
@@ -66,7 +66,7 @@ def insert_end_description(*args):
     
 def insert_heading(token, *args):
     if token.option == 2:
-        return f'<h3>{token.content}</h3>'
+        return f'<h4>{token.content}</h4>'
     elif token.option == 3:
         return f'<h5>{token.content}</h5>'
     else:
