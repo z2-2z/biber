@@ -84,7 +84,7 @@ def parse_argstr(argstr):
 
 def insert_code(token, plugins, *args):
     option = token.option.strip()
-    content = token.content.replace("<", "&lt;").replace("&", "&amp;").replace(">", "&gt;")
+    content = token.content
     
     if option:
         keyword = None

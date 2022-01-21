@@ -1,5 +1,9 @@
 .post-root {
-    max-width: 720px;
+    max-width: 920px;
+}
+
+.post-root *:not(a) {
+  color: #FEFEFE;
 }
 
 a {
@@ -84,4 +88,9 @@ code::-moz-selection, code::selection {
 
 thead td {
   font-size: 1.1em;
+}
+
+.post-latex-inline {
+  margin-left: 1em;
+  margin-right: 1em;
 }
