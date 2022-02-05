@@ -11,11 +11,11 @@ HTML_DOC = """\
         <meta charset="utf-8"/>
         <meta name="generator" content="biber">
         <title>{blog_title}</title>
-        <link rel="stylesheet" href="css/bootstrap.css"/>
-        <link rel="stylesheet" href="css/general.css"/>
-        <link rel="stylesheet" href="css/index/index.css"/>
+        <link rel="stylesheet" href="{urlbase}css/bootstrap.css"/>
+        <link rel="stylesheet" href="{urlbase}css/general.css"/>
+        <link rel="stylesheet" href="{urlbase}css/index/index.css"/>
         {feed_meta}
-        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="{urlbase}js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <div class="container">
@@ -40,7 +40,7 @@ HTML_DOC = """\
 HTML_SOCIAL = """\
 <div class="social-entry">
     <a class="social-link" href="{link}" target="_blank">
-        <img class="social-img" src="{image}">
+        <img class="social-img" src="{urlbase}{image}">
     </a>
 </div>
 """
@@ -48,9 +48,20 @@ HTML_SOCIAL = """\
 HTML_POST = """\
 <tr>
     <td align="left" class="post-category">[{category}]{pad}</td>
-    <td align="left" class="post-title"><a href="{link}">{title}</a></td>
+    <td align="left" class="post-title"><a href="{urlbase}{link}">{title}</a></td>
     <td align="left" class="post-date">{date}</td>
 </tr>
+"""
+HTML_POST_LINK = """\
+<tr>
+    <td align="left" class="post-category">[<a class="catlink" href="{urlbase}category/{category}.html">{category}</a>]{pad}</td>
+    <td align="left" class="post-title"><a href="{urlbase}{link}">{title}</a></td>
+    <td align="left" class="post-date">{date}</td>
+</tr>
+"""
+
+HTML_FEED = """\
+<link rel="alternate" type="application/rss+xml" href="{href}" title="{title}"/>
 """
 
 def create_feed(link, config, posts):
@@ -104,9 +115,9 @@ def create_index(config, posts):
             
             create_feed(link, config, posts)
             href = f"{config.get_blog('feed-domain')}/feed.xml"
-            feed_meta = f"""<link rel="alternate" type="application/rss+xml" href="{href}" title="{config.get_blog('title')}"/>"""
+            feed_meta = HTML_FEED.format(href=href, title=config.get_blog('title'))
             
-        socials.append(HTML_SOCIAL.format(link=link, image=img))
+        socials.append(HTML_SOCIAL.format(urlbase="", link=link, image=img))
     
     for post in posts:
         if len(post.get_category()) > max_size:
@@ -115,17 +126,18 @@ def create_index(config, posts):
     max_size += 1
     
     for post in posts:
-        date_str = post.get_date().strftime("%d. %b %Y")
-        table.append(HTML_POST.format(
+        table.append(HTML_POST_LINK.format(
             category=post.get_category(),
             pad="&nbsp;" * (max_size - len(post.get_category())),
-            link=f"posts/{post.id}/index.html",
+            link=post.link(),
             title=post.get_title(),
-            date=date_str
+            date=post.date_str(),
+            urlbase=""
         ))
     
     with open(index_html, "w") as f:
         f.write(HTML_DOC.format(
+            urlbase="",
             blog_title=config.get_blog("title"),
             socials="".join(socials),
             posts="".join(table),

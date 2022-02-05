@@ -62,3 +62,11 @@ tr td {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
 }
+
+.catlink {
+    color: inherit;
+}
+
+.catlink:hover {
+    color: white;
+}

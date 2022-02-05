@@ -7,6 +7,7 @@ from . import parse_config
 from . import create_dirs
 from . import create_index
 from . import create_post
+from . import create_catlist
 
 class BiberError(Exception):
     pass
@@ -82,6 +83,7 @@ def biber_main():
     create_dirs.create_standard_dirs(biber_dir, config)
     
     create_index.create_index(config, posts)
+    create_catlist.create_catlist(config, posts)
     
     while posts:
         create_post.create_post(config, posts[0], plugins)

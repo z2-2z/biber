@@ -115,6 +115,12 @@ class Post:
         with open(self.filename) as f:
             f.seek(self._pos)
             self._content = parse_md(f.read())
+            
+    def date_str(self):
+        return self._date.strftime("%d. %b %Y")
+        
+    def link(self):
+        return f"posts/{self.id}/index.html"
 
 def get_metadata(f):
     meta = {}
