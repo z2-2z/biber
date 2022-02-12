@@ -54,6 +54,13 @@ def generate_content(content, flags):
     style = parse_style(flags)
     spacing = parse_spacing(flags, len(aligns))
     
+    separator = "|"
+    if "separator" in flags:
+        separator = flags["separator"]
+        
+        if len(separator) != 1:
+            raise PluginError(f"Invalid separator: {separator}")
+    
     for line in content.split("\n"):
         if not line.strip():
             continue
@@ -66,7 +73,7 @@ def generate_content(content, flags):
         else:
             row = []
             
-            for cell in line.split(" | "):
+            for cell in line.split(f" {separator} "):
                 row.append(md_to_html(cell))
             
             if len(row) != len(aligns):
