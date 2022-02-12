@@ -175,13 +175,13 @@ def parse_md(content):
                 if node.t == "text":
                     text += node.literal
                 
-            if text is None:
+            if not text:
                 raise ParsingError("Got no heading text")
                 
             tokens.append(Token(f"heading", text, node.level))
                 
         elif node.t == "code_block":
-            tokens.append(Token("code", node.literal, node.info))
+            tokens.append(Token("code", node.literal.replace("<", "&lt;").replace(">", "&gt;"), node.info))
             
         elif node.t == "block_quote":
             content = ""
@@ -209,7 +209,7 @@ def parse_md(content):
             in_description = True
             
         elif node.t == "code":
-            tokens.append(Token("tag", node.literal))
+            tokens.append(Token("tag", node.literal.replace("<", "&lt;").replace(">", "&gt;")))
             
         elif node.t == "html_inline":
             html = node.literal
@@ -254,19 +254,19 @@ def parse_md(content):
             tokens.append(Token("italic", text))
             
         elif node.t == "link":
-            text = None
+            text = []
             
             for node, entering in it:
                 if node.t == "link" and not entering:
                     break
                 
                 if node.t == "text":
-                    text = node.literal
+                    text.append(node.literal)
                     
-            if text is None:
+            if not text:
                 raise ParsingError("No link text detected")
-                
-            tokens.append(Token("link", node.destination, text))
+            
+            tokens.append(Token("link", node.destination, "".join(text)))
             
         elif node.t in ["text", "html_block"]:
             if tokens and tokens[-1].type == "text":
