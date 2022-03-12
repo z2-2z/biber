@@ -1,0 +1,3 @@
+
+class BiberException(Exception):
+    pass

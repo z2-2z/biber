@@ -1,0 +1,85 @@
+
+body {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: minmax(200px, 1fr) 5fr;
+    overflow: hidden;
+}
+
+#sidebar-container {
+    border-right: 1px solid var(--bs-body-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.1em;
+    max-width: 300px;
+    overflow-y: auto;
+}
+
+#profile-container img {
+    border-radius: 1000px;
+    /* border: 1px solid var(--bs-body-color); */
+    max-width: 215px;
+    width: 100%;
+}
+
+#author-container {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+#blog-title {
+    font-size: 2.25em;
+}
+
+#socials-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.social-icon {
+    width: 1.5em;
+    opacity: 0.65;
+    margin-right: 0.35em;
+}
+
+.social-entry a {
+    text-decoration: none;
+    color: var(--bs-body-color);
+}
+
+.social-name {
+    text-transform: lowercase;
+}
+
+.social-entry {
+    margin-bottom: 0.5em;
+}
+
+@keyframes OpacityUp {
+    from {
+        opacity: 0.65;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes ColorBright {
+    from {
+        color: var(--bs-body-color);
+    }
+    to {
+        color: white;
+    }
+}
+
+.social-entry:hover .social-name {
+    color: white;
+    animation-name: ColorBright;
+    animation-duration: 0.5s;
+}
+.social-entry:hover .social-icon {
+    opacity: 1;
+    animation-name: OpacityUp;
+    animation-duration: 0.5s;
+}

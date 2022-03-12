@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        {% for i in stylesheets %}
+            <link rel="stylesheet" href="{{ i }}"/>
+        {% endfor %}
+        {% for i in scripts %}
+            <script src="{{ i }}"></script>
+        {% endfor %}
+        
+        <style>
+            @font-face {
+              font-family: 'Material Icons';
+              font-style: normal;
+              font-weight: 400;
+              src: url({{ static_folder }}fonts/MaterialIcons-Regular.ttf) format('truetype');
+            }
+        </style>
+    </head>
+    <body>
+        <div id="sidebar-container">
+            <div id="profile-container">
+                <img src="{{ static_folder }}img/profile.png"/>
+            </div>
+            <div id="author-container">
+                <span id="blog-title">{{ blog_title }}</span>
+            </div>
+            <div id="socials-container">
+                {% for social in socials %}
+                <div class="social-entry">
+                    <a href="{{ social.url }}" target="_blank">
+                        <span><img class="social-icon" src="{{ social.icon }}"></span>
+                        <span class="social-name">{{ social.name }}</span>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="content-container">
+            
+        </div>
+    </body>
+</html>
