@@ -2,7 +2,7 @@
 body {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: minmax(200px, 1fr) 5fr;
+    grid-template-columns: minmax(200px, 300px) 1fr;
     overflow: hidden;
 }
 
@@ -11,8 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0.1em;
-    max-width: 300px;
+    padding: 0.1em;
     overflow-y: auto;
 }
 
@@ -30,6 +29,9 @@ body {
 
 #blog-title {
     font-size: 2.25em;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--bs-body-color);
 }
 
 #socials-container {
@@ -73,13 +75,45 @@ body {
     }
 }
 
-.social-entry:hover .social-name {
+.social-link:hover .social-name {
     color: white;
     animation-name: ColorBright;
-    animation-duration: 0.5s;
+    animation-duration: 0.2s;
 }
-.social-entry:hover .social-icon {
+.social-link:hover .social-icon {
     opacity: 1;
     animation-name: OpacityUp;
-    animation-duration: 0.5s;
+    animation-duration: 0.2s;
+}
+
+#post-title {
+    margin-top: 1em;
+}
+
+#metadata-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.metadata-icon {
+    margin-right: 0.3em;
+}
+
+.post-category {
+    text-decoration: none;
+    color: var(--bs-body-color);
+    text-transform: lowercase;
+}
+
+#category-listing {
+    display: inherit;
+    margin-left: 1em;
+}
+
+.post-category:hover {
+    color: white;
+    animation-name: ColorBright;
+    animation-duration: 0.2s;
 }

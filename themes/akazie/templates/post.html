@@ -16,20 +16,56 @@
               font-weight: 400;
               src: url({{ static_folder }}fonts/MaterialIcons-Regular.ttf) format('truetype');
             }
+            
+            @font-face {
+              font-family: 'Fira Code';
+              font-style: normal;
+              font-weight: 300;
+              font-display: swap;
+              src: url({{ static_folder }}fonts/Fira-Code-300.ttf) format('truetype');
+            }
+            @font-face {
+              font-family: 'Fira Code';
+              font-style: normal;
+              font-weight: 400;
+              font-display: swap;
+              src: url({{ static_folder }}fonts/Fira-Code-400.ttf) format('truetype');
+            }
+            @font-face {
+              font-family: 'Fira Code';
+              font-style: normal;
+              font-weight: 500;
+              font-display: swap;
+              src: url({{ static_folder }}fonts/Fira-Code-500.ttf) format('truetype');
+            }
+            @font-face {
+              font-family: 'Fira Code';
+              font-style: normal;
+              font-weight: 600;
+              font-display: swap;
+              src: url({{ static_folder }}fonts/Fira-Code-600.ttf) format('truetype');
+            }
+            @font-face {
+              font-family: 'Fira Code';
+              font-style: normal;
+              font-weight: 700;
+              font-display: swap;
+              src: url({{ static_folder }}fonts/Fira-Code-700.ttf) format('truetype');
+            }
         </style>
     </head>
     <body>
         <div id="sidebar-container">
             <div id="profile-container">
-                <img src="{{ static_folder }}img/profile.png"/>
+                <a href="{{ post_listing }}"><img src="{{ static_folder }}img/profile.png"></a>
             </div>
             <div id="author-container">
-                <span id="blog-title">{{ blog_title }}</span>
+                <a href="{{ post_listing }}" id="blog-title">{{ blog_title }}</a>
             </div>
             <div id="socials-container">
                 {% for social in socials %}
                 <div class="social-entry">
-                    <a href="{{ social.url }}" target="_blank">
+                    <a href="{{ social.url }}" target="_blank" class="social-link">
                         <span><img class="social-icon" src="{{ social.icon }}"></span>
                         <span class="social-name">{{ social.name }}</span>
                     </a>
@@ -37,8 +73,24 @@
                 {% endfor %}
             </div>
         </div>
-        <div id="content-container">
-            
+        <div id="content-container" >
+            <div class="container">
+                <h1 id="post-title">{{ title }}</h1>
+                <hr/>
+                <div id="metadata-container">
+                    <span class="metadata-icon material-icons">schedule</span>
+                    <span>{{ post_date }}</span>
+                    <div id="category-listing">
+                        <span class="metadata-icon material-icons">local_offer</span>
+                        {% for catname, catlink in categories %}
+                            <a class="post-category" href="{{ catlink }}" target="_blank">{{ catname }}</a>&nbsp;
+                        {% endfor %}
+                    </div>
+                </div>
+                {% for el in elements %}
+                    {{ el }}
+                {% endfor %}
+            </div>
         </div>
     </body>
 </html>

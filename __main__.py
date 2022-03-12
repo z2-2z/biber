@@ -1,6 +1,7 @@
 import os
 import sys
 import multiprocessing
+import locale
 
 from . import errors as biber_errors
 from . import config as biber_config
@@ -16,12 +17,18 @@ def create_posts(config, plugins, posts):
         
         config["blog"]["theme"].generate_post(post, elements, config, plugins)
 
+#TODO: command line argument to use locale of system not en_US
 #TODO: command line argument -f to force regeneration
 #TODO: command line argument -j for threads
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <config file>")
         exit(1)
+    
+    try:
+        locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+    except locale.Error:
+        locale.setlocale(locale.LC_ALL, '')
     
     nthreads = 4
     
