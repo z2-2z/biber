@@ -3,11 +3,14 @@ import sys
 import multiprocessing
 import locale
 import importlib
+import datetime
 
 from . import errors as biber_errors
 from . import config as biber_config
 from . import posts as biber_posts
 from . import markdown
+from . import routes
+from . import utils
 
 def list_importable_modules(dir):
     for entry in os.listdir(dir):
@@ -53,6 +56,46 @@ def create_posts(config, plugins, posts):
             raise biber_errors.BiberException(f"Parsing error in {post.filename}: {e}")
         
         config["blog"]["theme"].generate_post(post, elements, config, plugins)
+
+def generate_feed(config, posts):
+    if not config.has_feed():
+        return
+    if config["blog"]["domain"] is None:
+        raise biber_errors.BiberException("Configuration is set to generate an RSS feed but no domain is given")
+    
+    out_file = utils.join_paths(
+        config["blog"]["out"],
+        routes.RSS_FEED
+    )
+    now = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
+    
+    with utils.create_open(out_file) as f:
+        f.write('<?xml version="1.0" encoding="UTF-8" ?>')
+        f.write('<rss version="2.0">')
+        f.write('<channel>')
+        f.write(f'<title>{config["blog"]["title"]}</title>')
+        f.write('<description></description>')
+        f.write(f'<lastBuildDate>{now}</lastBuildDate>')
+        f.write(f'<link>{config["blog"]["domain"]}{routes.RSS_FEED}</link>')
+        f.write(f'<pubDate>{now}</pubDate>')
+        f.write('<generator>biber 2.0</generator>')
+        
+        for post in posts:
+            date = post.metadata.date.astimezone(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
+            url = config["blog"]["domain"] + routes.post_page(post)
+            f.write('<item>')
+            f.write(f'<title>{post.metadata.title}</title>')
+            f.write(f'<description><a href="{url}">{post.metadata.title}</a></description>')
+            f.write(f'<pubDate>{date}</pubDate>')
+            
+            for cat in post.metadata.categories:
+                f.write(f'<category>{cat}</category>')
+            
+            f.write(f'<author>{post.metadata.author}</author>')
+            f.write('</item>')
+            
+        f.write('</channel>')
+        f.write('</rss>')
 
 #TODO: command line argument to use locale of system not en_US
 #TODO: command line argument -f to force regeneration
@@ -102,7 +145,7 @@ def main():
     
     #TODO: export keys, sign stuff
     
-    #TODO: generate feed if set
+    generate_feed(config, reversed(posts[-config["feed"]["size"]:]))
 
 if __name__ == "__main__":
     try:
