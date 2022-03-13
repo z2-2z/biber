@@ -1,7 +1,7 @@
 from ... import routes, utils
 from . import templates
 
-def top_categories(config, posts):
+def category_hits(config, posts):
     hits = {}
     
     for post in posts:
@@ -12,11 +12,6 @@ def top_categories(config, posts):
                 hits[cat] += 1
             else:
                 hits[cat] = 1
-                
-    not_top_cats = sorted(hits.keys(), key=lambda x: hits[x], reverse=True)[5:]
-    
-    for name in not_top_cats:
-        del hits[name]
         
     return hits
 
@@ -35,7 +30,7 @@ def generate_index(config, posts):
         utils.join_paths(routes.STATIC_FOLDER, "js", "bootstrap.bundle.min.js"),
         utils.join_paths(routes.STATIC_FOLDER, "js", "init_bootstrap.js"),
     ]
-    top_cats = top_categories(config, posts)
+    cats = category_hits(config, posts)
     
     with utils.create_open(out_file) as f:
         f.write(templates.create_index(
@@ -48,6 +43,5 @@ def generate_index(config, posts):
             get_post_route=routes.post_page,
             get_cat_route=routes.get_catlist_page,
             post_listing=routes.POST_LISTING,
-            top_cats=top_cats.items(),
-            cat_listing=routes.ALL_CATS_PAGE,
+            cats=cats.items(),
         ))

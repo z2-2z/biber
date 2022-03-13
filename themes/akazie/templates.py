@@ -26,3 +26,13 @@ def create_index(**kwargs):
     global environment
     template = environment.get_template("index.html")
     return template.render(kwargs)
+
+def create_postlist(**kwargs):
+    global environment
+    template = environment.get_template("postlist.html")
+    return template.render(kwargs)
+    
+def create_catlist(**kwargs):
+    global environment
+    template = environment.get_template("catlist.html")
+    return template.render(kwargs)

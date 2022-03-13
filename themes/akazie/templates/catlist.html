@@ -71,7 +71,7 @@
         </div>
         <div id="content-container">
             <div class="container">
-                <center><h4 class="subsection-headline">latest posts</h4></center>
+                <center><h4 class="subsection-headline">category: {{ cat }}</h4></center>
                 <hr/>
                 <div id="latest-posts-container">
                     {% for post in posts %}
@@ -87,16 +87,6 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <a id="more-posts" href="{{ post_listing }}">see older posts...</a>
-                </div>
-                <center><h4 class="subsection-headline">categories</h4></center>
-                <hr/>
-                <div id="top-cats-container">
-                    <div id="top-cats">
-                        {% for name, hits in cats %}
-                            <span class="top-cat-name"><a href="{{ get_cat_route(name) }}">{{ name }}</a></span><span class="top-cat-hits">({{ hits }})</span>
-                        {% endfor %}
-                    </div>
                 </div>
             </div>
         </div>
