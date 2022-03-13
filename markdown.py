@@ -3,9 +3,6 @@ from . import utils
 
 import markdown_it
 
-class ParsingException(Exception):
-    pass
-
 def parse_heading(token, stream):
     levels = {
         "h1": 1,

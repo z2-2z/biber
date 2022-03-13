@@ -24,6 +24,9 @@ class Metadata:
         self.title = title
         self.sign = sign
         self.attachment = attachment
+        
+    def format_date(self):
+        return self.date.strftime("%d %b. %Y")
 
 def metadata_parse_list(value):
     ret = []

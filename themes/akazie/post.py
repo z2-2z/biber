@@ -257,6 +257,7 @@ def generate_post(post, tree, config, plugins):
         routes.post_page(post)
     )
     
+    #TODO: only include prism when code element was used (plugin and NOT plugin!)
     stylesheets = [
         utils.join_paths(routes.STATIC_FOLDER, "css", "bootstrap.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "common.css"),
@@ -285,9 +286,9 @@ def generate_post(post, tree, config, plugins):
             static_folder=routes.STATIC_FOLDER,
             blog_title=config["blog"]["title"],
             socials=config["socials"],
-            post_listing=routes.POST_LISTING_PAGE,
+            home_page=routes.HOME_PAGE,
             elements=elements,
-            post_date=post.metadata.date.strftime("%d %b. %Y"),
+            post_date=post.metadata.format_date(),
             categories=map(lambda x: (x, routes.get_catlist_page(x)), post.metadata.categories)
         ))
         
@@ -297,4 +298,4 @@ def generate_post(post, tree, config, plugins):
         utils.create_copy(input, output)
     used_images.clear()
                 
-    
+    #TODO: handle sign, attachment

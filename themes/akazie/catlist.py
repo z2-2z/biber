@@ -1,3 +1,3 @@
 
-def generate_catlist(posts, config):
+def generate_catlist(config, posts):
     pass

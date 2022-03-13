@@ -21,3 +21,8 @@ def create_post(**kwargs):
     global environment
     template = environment.get_template("post.html")
     return template.render(kwargs)
+
+def create_index(**kwargs):
+    global environment
+    template = environment.get_template("index.html")
+    return template.render(kwargs)

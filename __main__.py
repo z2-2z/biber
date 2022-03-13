@@ -98,9 +98,11 @@ def main():
     for proc in workers:
         proc.join()
     
-    theme.copy_static_files(config)
-    theme.generate_index(posts, config)
-    theme.generate_catlist(posts, config)
+    theme.generate_pages(config, posts)
+    
+    #TODO: export keys, sign stuff
+    
+    #TODO: generate feed if set
 
 if __name__ == "__main__":
     try:

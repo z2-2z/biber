@@ -3,11 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta name="generator" content="biber 2.0">
+        <title>{{ blog_title }}</title>
         
-        <title>{{ title }}</title>
         {% for i in stylesheets %}
             <link rel="stylesheet" href="{{ i }}"/>
         {% endfor %}
+        
         {% for i in scripts %}
             <script src="{{ i }}"></script>
         {% endfor %}
@@ -58,39 +59,46 @@
         </style>
     </head>
     <body>
-        <div id="sidebar-container">
-            <div id="profile-container">
-                <a href="{{ home_page }}"><img src="{{ static_folder }}img/profile.png"></a>
+        <div id="title-container">
+            <div id="blog-title">
+                <h1>{{ blog_title }}</h1>
             </div>
-            <div id="author-container">
-                <a href="{{ home_page }}" id="blog-title">{{ blog_title }}</a>
-            </div>
-            <div id="socials-container">
+            <div id="socials-list">
                 {% for social in socials %}
-                <div class="social-entry">
-                    <a href="{{ social.url }}" target="_blank" class="social-link">
-                        <span><img class="social-icon" src="{{ social.icon }}"></span>
-                        <span class="social-name">{{ social.name }}</span>
-                    </a>
-                </div>
+                    <a href="{{ social.url }}" target="_blank"><img class="social-icon" src="{{ social.icon }}"></a>
                 {% endfor %}
             </div>
         </div>
-        <div id="content-container" >
+        <div id="content-container">
             <div class="container">
-                <h1 id="post-title">{{ title }}</h1>
+                <center><h4 class="subsection-headline">latest posts</h4></center>
                 <hr/>
-                <div id="metadata-container">
-                    <span class="metadata-icon material-icons">calendar_month</span>
-                    <span>{{ post_date }}</span>
-                    <div id="category-listing">
-                        <span class="metadata-icon material-icons">local_offer</span>
-                        {% for catname, catlink in categories %}
-                            <a class="post-category" href="{{ catlink }}" target="_blank">{{ catname }}</a>&nbsp;
+                <div id="latest-posts-container">
+                    {% for post in posts %}
+                    <div class="latest-post">
+                        <h5 class="post-title"><a href="{{ get_post_route(post) }}" target="_blank">{{ post.metadata.title }}</a></h5>
+                        <div class="post-metadata">
+                            <span class="metadata-icon material-icons">calendar_month</span>
+                            <span>{{ post.metadata.format_date() }}</span>
+                            <span id="cat-icon" class="metadata-icon material-icons">local_offer</span>
+                            {% for cat in post.metadata.categories %}
+                                <span class="cat-link"><a href="{{ get_cat_route(cat) }}">{{ cat }}</a></span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <a id="more-posts" href="{{ post_listing }}">see older posts...</a>
+                </div>
+                <center><h4 class="subsection-headline">top categories</h4></center>
+                <hr/>
+                <div id="top-cats-container">
+                    <div id="top-cats">
+                        {% for name, hits in top_cats %}
+                            <span class="top-cat-name"><a href="{{ get_cat_route(name) }}" target="_blank">{{ name }}</a></span><span class="top-cat-hits">({{ hits }})</span>
                         {% endfor %}
                     </div>
+                    <a id="more-cats" href="{{ cat_listing }}">see all categories...</a>
                 </div>
-                {% for el in elements %}{{ el }}{% endfor %}
             </div>
         </div>
     </body>
