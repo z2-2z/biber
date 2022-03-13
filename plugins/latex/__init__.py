@@ -12,7 +12,8 @@ EXTRA_STYLESHEETS = [
 EXTRA_FILES = [
     "output/chtml/fonts/woff-v2/MathJax_Zero.woff",
     "output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff",
-    "output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff"
+    "output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff",
+    "output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff"
 ]
 
 def generate_content(content, args):
