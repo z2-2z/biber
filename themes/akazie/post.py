@@ -57,6 +57,9 @@ def emphasis_to_html(emphasis):
     return ret
     
 def block_to_html(block):
+    global used_plugins
+    used_plugins.add("code")
+    
     return [
         '<pre><code class="language-none">'
         + html.escape(block)
@@ -65,6 +68,7 @@ def block_to_html(block):
     
 def plugin_to_html(block, plugins):
     global used_plugins
+    used_plugins.add(block.name)
     
     # The "code" plugin is built in 
     if block.name == "code":
@@ -97,8 +101,6 @@ def plugin_to_html(block, plugins):
     else:
         if block.name not in plugins:
             raise ThemeException(f"Plugin {block.name} not found")
-            
-        used_plugins.add(block.name)
             
         return plugins[block.name].generate_content(block.content, block.args)
 
@@ -214,6 +216,11 @@ def handle_plugins(config, plugins):
     styles = []
     scripts = []
     
+    if "code" in used_plugins:
+        styles.append(utils.join_paths(routes.STATIC_FOLDER, "css", "prism.css"))
+        scripts.append(utils.join_paths(routes.STATIC_FOLDER, "js", "prism.js"))
+        used_plugins.remove("code")
+    
     for name in used_plugins:
         plugin_dir = utils.join_paths(config["blog"]["plugins"], name)
         if not os.path.isdir(plugin_dir):
@@ -257,18 +264,15 @@ def generate_post(post, tree, config, plugins):
         routes.post_page(post)
     )
     
-    #TODO: only include prism when code element was used (plugin and NOT plugin!)
     stylesheets = [
         utils.join_paths(routes.STATIC_FOLDER, "css", "bootstrap.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "common.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "post.css"),
-        utils.join_paths(routes.STATIC_FOLDER, "css", "prism.css"),
     ]
     scripts = [
         utils.join_paths(routes.STATIC_FOLDER, "js", "jquery.min.js"),
         utils.join_paths(routes.STATIC_FOLDER, "js", "bootstrap.bundle.min.js"),
         utils.join_paths(routes.STATIC_FOLDER, "js", "init_bootstrap.js"),
-        utils.join_paths(routes.STATIC_FOLDER, "js", "prism.js"),
     ]
     elements = []
     
@@ -297,5 +301,17 @@ def generate_post(post, tree, config, plugins):
         output = utils.join_paths(os.path.dirname(out_file), img)
         utils.create_copy(input, output)
     used_images.clear()
-                
-    #TODO: handle sign, attachment
+    
+    #TODO: handle sign
+    
+    for att in post.metadata.attachment:
+        input_file = utils.join_paths(
+            os.path.dirname(post.filename),
+            att
+        )
+        output_file = utils.join_paths(
+            config["blog"]["out"],
+            routes.post_folder(post),
+            att
+        )
+        utils.create_copy(input_file, output_file)
