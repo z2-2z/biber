@@ -1,6 +1,5 @@
 import os
 import sys
-import multiprocessing
 import locale
 import importlib
 import datetime
@@ -85,13 +84,14 @@ def generate_feed(config, posts):
             url = config["blog"]["domain"] + routes.post_page(post)
             f.write('<item>')
             f.write(f'<title>{post.metadata.title}</title>')
-            f.write(f'<description><a href="{url}">{post.metadata.title}</a></description>')
+            f.write(f'<description>{post.metadata.title}: <a href="{url}">{url}</a></description>')
             f.write(f'<pubDate>{date}</pubDate>')
             
             for cat in post.metadata.categories:
                 f.write(f'<category>{cat}</category>')
             
             f.write(f'<author>{post.metadata.author}</author>')
+            f.write(f'<link>{url}</link>')
             f.write('</item>')
             
         f.write('</channel>')
@@ -99,7 +99,6 @@ def generate_feed(config, posts):
 
 #TODO: command line argument to use locale of system not en_US
 #TODO: command line argument -f to force regeneration
-#TODO: command line argument -j for threads
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <config file>")
@@ -110,8 +109,6 @@ def main():
     except locale.Error:
         locale.setlocale(locale.LC_ALL, '')
     
-    nthreads = 4
-    
     config = biber_config.parse(sys.argv[1])
     posts = biber_posts.create_post_listing(config, True)
     theme = config["blog"]["theme"]
@@ -120,32 +117,12 @@ def main():
     if config["blog"]["plugins"] is not None:
         plugins = load_plugins_from_dir(config["blog"]["plugins"])
     
-    if len(posts) == 0:
-        return
-    elif len(posts) <= nthreads:
-        nthreads = 1
-    
-    bucket_size = (len(posts) + nthreads - 1) // nthreads
-    
     theme.initialize()
-    
-    workers = []
-    for i in range(0, len(posts), bucket_size):
-        proc = multiprocessing.Process(
-            target=create_posts,
-            args=(config, plugins, posts[i : i + bucket_size])
-        )
-        proc.start()
-        workers.append(proc)
-    
-    for proc in workers:
-        proc.join()
-    
+    create_posts(config, plugins, posts)
     theme.generate_pages(config, posts)
+    generate_feed(config, reversed(posts[-config["feed"]["size"]:]))
     
     #TODO: export keys, sign stuff
-    
-    generate_feed(config, reversed(posts[-config["feed"]["size"]:]))
 
 if __name__ == "__main__":
     try:

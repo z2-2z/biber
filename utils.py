@@ -36,8 +36,8 @@ def next_escaped(input, sep, escape=[]):
     return (res, "")
     
 def create_copy(src, dst):
-    #if os.path.isfile(dst):
-    #    return
+    if os.path.isfile(dst):
+        return
     
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     shutil.copyfile(src, dst)
