@@ -2,6 +2,7 @@ from ... import routes, utils, elements, ThemeException
 from . import templates
 
 import os
+import sys
 import html
 import shutil
 
@@ -208,8 +209,48 @@ def element_to_html(element, plugins=None):
     else:
         raise ThemeException(f"Invalid element: {type(element)}")
 
+def handle_plugins(config, plugins):
+    global used_plugins
+    styles = []
+    scripts = []
+    
+    for name in used_plugins:
+        plugin_dir = utils.join_paths(config["blog"]["plugins"], name)
+        if not os.path.isdir(plugin_dir):
+            plugin_dir = config["blog"]["plugins"]
+        
+        out_dir = utils.join_paths(config["blog"]["out"], routes.plugin_folder(name))
+        
+        for filename in plugins[name].EXTRA_SCRIPTS:
+            utils.create_copy(
+                utils.join_paths(plugin_dir, filename),
+                utils.join_paths(out_dir, filename)
+            )
+            scripts.append(
+                utils.join_paths(routes.plugin_folder(name), filename)
+            )
+            
+        for filename in plugins[name].EXTRA_STYLESHEETS:
+            utils.create_copy(
+                utils.join_paths(plugin_dir, filename),
+                utils.join_paths(out_dir, filename)
+            )
+            styles.append(
+                utils.join_paths(routes.plugin_folder(name), filename)
+            )
+            
+        for filename in plugins[name].EXTRA_FILES:
+            utils.create_copy(
+                utils.join_paths(plugin_dir, filename),
+                utils.join_paths(out_dir, filename)
+            )
+    
+    used_plugins.clear()
+    
+    return scripts, styles
+
 def generate_post(post, tree, config, plugins):
-    global used_plugins, used_images
+    global used_images
     
     out_file = utils.join_paths(
         config["blog"]["out"],
@@ -233,11 +274,14 @@ def generate_post(post, tree, config, plugins):
     for element in tree:
         elements.extend(element_to_html(element, plugins))
     
+    # Copy the plugin files and insert necessary script/style tags
+    extra_scripts, extra_styles = handle_plugins(config, plugins)
+    
     with utils.create_open(out_file) as f:
         f.write(templates.create_post(
             title=post.metadata.title,
-            stylesheets=stylesheets,
-            scripts=scripts,
+            stylesheets=stylesheets + extra_styles,
+            scripts=scripts + extra_scripts,
             static_folder=routes.STATIC_FOLDER,
             blog_title=config["blog"]["title"],
             socials=config["socials"],
@@ -250,9 +294,7 @@ def generate_post(post, tree, config, plugins):
     for img in used_images:
         input = utils.join_paths(os.path.dirname(post.filename), img)
         output = utils.join_paths(os.path.dirname(out_file), img)
-        shutil.copyfile(input, output)
+        utils.create_copy(input, output)
     used_images.clear()
                 
-    #TODO: copy plugins static files
-    used_plugins.clear()
     

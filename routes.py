@@ -12,3 +12,6 @@ def post_page(post):
     
 def get_catlist_page(cat):
     return f"/category/{cat.lower()}.html"
+
+def plugin_folder(name):
+    return f"/plugin/{name}/"

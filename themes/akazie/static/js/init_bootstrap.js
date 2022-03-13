@@ -1,6 +1,6 @@
 /*
 This file contains some functions to initialize
-bootstrap elements such as Popovers, Tooltips, etc.
+bootstrap elements such as popovers, tooltips and modals.
 */
 
 function enable_popovers() {

@@ -60,6 +60,7 @@ class Config:
             "plugins" : None,
             "domain" : None,
             "theme" : None,
+            "plugins": None,
         }
         self._feed = {
             "size" : None

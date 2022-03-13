@@ -1,4 +1,5 @@
 import os
+import shutil
 
 # Join paths but convert absolute path
 # components to relative path components
@@ -33,3 +34,10 @@ def next_escaped(input, sep, escape=[]):
         i += 1
     
     return (res, "")
+    
+def create_copy(src, dst):
+    #if os.path.isfile(dst):
+    #    return
+    
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copyfile(src, dst)

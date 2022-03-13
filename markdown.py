@@ -84,8 +84,10 @@ def parse_codeblock(token, stream):
     if not token.info:
         return elements.Block(token.content)
     else:
-        name, argstring = token.info.strip().split(" ", 1)
-        args = parse_argstring(argstring)
+        name, *argstring = token.info.strip().split(" ", 1)
+        args = {}
+        if argstring:
+            args = parse_argstring(argstring[0])
         return elements.PluginInvocation(name, args, token.content)
 
 def parse_list_item(token, stream):
