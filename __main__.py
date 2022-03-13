@@ -34,7 +34,7 @@ def main():
     
     config = biber_config.parse(sys.argv[1])
     posts = biber_posts.create_post_listing(config, True)
-    plugins = None
+    plugins = {}
     theme = config["blog"]["theme"]
     
     if len(posts) == 0:

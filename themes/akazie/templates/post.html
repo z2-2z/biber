@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta name="generator" content="biber 2.0">
+        
         <title>{{ title }}</title>
         {% for i in stylesheets %}
             <link rel="stylesheet" href="{{ i }}"/>
@@ -87,9 +90,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                {% for el in elements %}
-                    {{ el }}
-                {% endfor %}
+                {% for el in elements %}{{ el }}{% endfor %}
             </div>
         </div>
     </body>

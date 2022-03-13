@@ -187,7 +187,7 @@ def parse_image(token, stream):
     if "alt" not in token.attrs or token.children:
         substream = iter(token.children)
         for child in substream:
-            alt.append(parse_any(child, substream))
+            alt.extend(parse_any(child, substream))
     else:
         alt.append(elements.Text(token.attrs["alt"]))
     

@@ -31,4 +31,10 @@ html, body {
     text-rendering: optimizeLegibility;
 }
 
-/* TODO: font */
+ol {
+  margin-left: 1em;
+}
+
+ul {
+  list-style-type: disclosure-closed;
+}

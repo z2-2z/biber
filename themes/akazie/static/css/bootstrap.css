@@ -254,7 +254,6 @@ a:not([href]):not([class]), a:not([href]):not([class]):hover {
 }
 
 pre,
-code,
 kbd,
 samp {
   font-family: var(--bs-font-monospace);
@@ -269,22 +268,6 @@ pre {
   margin-bottom: 1rem;
   overflow: auto;
   font-size: 0.875em;
-  color: inherit;
-}
-
-pre code {
-  font-size: inherit;
-  color: inherit;
-  word-break: normal;
-}
-
-code {
-  font-size: 0.875em;
-  color: #e83e8c;
-  word-wrap: break-word;
-}
-
-a > code {
   color: inherit;
 }
 
