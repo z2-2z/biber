@@ -54,6 +54,9 @@
   z-index: 1;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border: 1px solid var(--bs-primary);
 }
 
 .post-metadata {
@@ -96,6 +99,7 @@
   margin: 0;
   margin-bottom: 1em;
   text-transform: lowercase;
+  font-size: 1.675em;
 }
 
 #top-cats {
