@@ -7,9 +7,7 @@ import datetime
 from . import errors as biber_errors
 from . import config as biber_config
 from . import posts as biber_posts
-from . import markdown
-from . import routes
-from . import utils
+from . import markdown, routes, utils, pgp
 
 def list_importable_modules(dir):
     for entry in os.listdir(dir):
@@ -122,7 +120,15 @@ def main():
     theme.generate_pages(config, posts)
     generate_feed(config, reversed(posts[-config["feed"]["size"]:]))
     
-    #TODO: export keys, sign stuff
+    #TODO: sign stuff
+    for social in config["socials"]:
+        if social.name == "E-Mail":
+            key = social.url.split("/")[-1].split(".")[0]
+            pgp.dump_public_key(
+                config,
+                utils.join_paths(config["blog"]["out"], social.url),
+                key
+            )
 
 if __name__ == "__main__":
     try:

@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 PROG = "gpg"
 
@@ -17,7 +18,8 @@ def dump_public_key(config, outfile, key):
             
         if config["pgp"]["dir"] is not None:
             cmdline.extend(["--homedir", config["pgp"]["dir"]])
-            
+    
+    os.makedirs(os.path.dirname(outfile), exist_ok=True)
     cmdline.extend(["--armor", "--yes", "-q", "--output", outfile, "--export", key])
     run(cmdline)
 

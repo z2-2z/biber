@@ -77,7 +77,7 @@ class Config:
         
     def has_pgp(self):
         for req in REQUIRED_PGP_SETTINGS:
-            if self._gpg[req] is None:
+            if self._pgp[req] is None:
                 return False
         return True
         
