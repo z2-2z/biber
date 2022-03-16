@@ -173,6 +173,42 @@ def image_to_html(element):
     ret.append('"></center>')
     return ret
 
+def table_to_html(table):
+    ret = ['<table class="table table-striped">']
+    
+    if table.head is not None:
+        ret.append("<thead>")
+        ret.extend(element_to_html(table.head))
+        ret.append("</thead>")
+        
+    ret.append("<tbody>")
+        
+    for row in table.body:
+        ret.extend(element_to_html(row))
+    
+    ret.append("</tbody>")
+    
+    ret.append("</table>")
+    return ret
+
+def trow_to_html(row):
+    ret = ["<tr>"]
+    
+    for subel in row:
+        if isinstance(subel, elements.Td):
+            ret.append("<td>")
+            for subsubel in subel:
+                ret.extend(element_to_html(subsubel))
+            ret.append("</td>")
+        elif isinstance(subel, elements.Th):
+            ret.append("<th>")
+            for subsubel in subel:
+                ret.extend(element_to_html(subsubel))
+            ret.append("</th>")
+    
+    ret.append("</tr>")
+    return ret
+
 def element_to_html(element, plugins=None):
     if not isinstance(element, elements.Element):
         raise ThemeException(f"Tried to convert an invalid element to html: {element}")
@@ -208,6 +244,10 @@ def element_to_html(element, plugins=None):
         return link_to_html(element)
     elif isinstance(element, elements.Image):
         return image_to_html(element)
+    elif isinstance(element, elements.Table):
+        return table_to_html(element)
+    elif isinstance(element, elements.Trow):
+        return trow_to_html(element)
     else:
         raise ThemeException(f"Invalid element: {type(element)}")
 

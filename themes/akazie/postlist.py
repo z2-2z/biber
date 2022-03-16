@@ -9,7 +9,7 @@ def generate_postlist(config, posts):
     stylesheets = [
         utils.join_paths(routes.STATIC_FOLDER, "css", "bootstrap.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "common.css"),
-        utils.join_paths(routes.STATIC_FOLDER, "css", "postlist.css"),
+        utils.join_paths(routes.STATIC_FOLDER, "css", "listing.css"),
     ]
     scripts = [
         utils.join_paths(routes.STATIC_FOLDER, "js", "jquery.min.js"),

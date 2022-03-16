@@ -9,7 +9,7 @@ def generate_catlist(config, posts, cat):
     stylesheets = [
         utils.join_paths(routes.STATIC_FOLDER, "css", "bootstrap.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "common.css"),
-        utils.join_paths(routes.STATIC_FOLDER, "css", "catlist.css"),
+        utils.join_paths(routes.STATIC_FOLDER, "css", "listing.css"),
     ]
     scripts = [
         utils.join_paths(routes.STATIC_FOLDER, "js", "jquery.min.js"),
@@ -32,7 +32,7 @@ def generate_catlist(config, posts, cat):
             posts=reversed(selected_posts),
             get_post_route=routes.post_page,
             get_cat_route=routes.get_catlist_page,
-            cat=cat,
+            cat=cat.lower(),
         ))
 
 def generate_catlists(config, posts):

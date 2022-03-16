@@ -23,7 +23,7 @@ def generate_index(config, posts):
     stylesheets = [
         utils.join_paths(routes.STATIC_FOLDER, "css", "bootstrap.css"),
         utils.join_paths(routes.STATIC_FOLDER, "css", "common.css"),
-        utils.join_paths(routes.STATIC_FOLDER, "css", "index.css"),
+        utils.join_paths(routes.STATIC_FOLDER, "css", "listing.css"),
     ]
     scripts = [
         utils.join_paths(routes.STATIC_FOLDER, "js", "jquery.min.js"),

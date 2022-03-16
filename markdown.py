@@ -192,6 +192,117 @@ def parse_image(token, stream):
     
     return elements.Image(token.attrs["src"], alt)
 
+def parse_th(token, stream):
+    element = elements.Th()
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed th")
+            
+        if token.type == "th_close":
+            break
+        else:
+            element.extend(parse_any(token, stream))
+    
+    return element
+
+def parse_td(token, stream):
+    element = elements.Td()
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed td")
+            
+        if token.type == "td_close":
+            break
+        else:
+            element.extend(parse_any(token, stream))
+    
+    return element
+
+def parse_tr(token, stream):
+    element = elements.Trow()
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed tr")
+            
+        if token.type == "tr_close":
+            break
+        elif token.type == "th_open":
+            element.append(parse_th(token, stream))
+        elif token.type == "td_open":
+            element.append(parse_td(token, stream))
+        else:
+            raise ParsingException(f"Unexpected markdown element in tr: {token.type}")
+    
+    return element
+
+def parse_thead(token, stream):
+    ret = None
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed thead")
+            
+        if token.type == "thead_close":
+            break
+        elif token.type == "tr_open":
+            if ret is not None:
+                raise ParsingException(f"Got more than one row in thead")
+                
+            ret = parse_tr(token, stream)
+        else:
+            raise ParsingException(f"Unexpected markdown element in thead: {token.type}")
+    
+    return ret
+    
+def parse_tbody(token, stream):
+    ret = []
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed tbody")
+            
+        if token.type == "tbody_close":
+            break
+        elif token.type == "tr_open":
+            ret.append(parse_tr(token, stream))
+        else:
+            raise ParsingException(f"Unexpected markdown element in tbody: {token.type}")
+    
+    return ret
+
+def parse_table(token, stream):
+    element = elements.Table()
+    
+    while True:
+        try:
+            token = next(stream)
+        except StopIteration:
+            raise ParsingException(f"Unclosed table")
+            
+        if token.type == "table_close":
+            break
+        elif token.type == "thead_open":
+            element.head = parse_thead(token, stream)
+        elif token.type == "tbody_open":
+            element.body = parse_tbody(token, stream)
+        else:
+            raise ParsingException(f"Unexpected markdown element in table: {token.type}")
+    
+    return element
+
 ANY_ITEMS = {
     "heading_open" : parse_heading,
     "paragraph_open" : parse_paragraph,
@@ -208,6 +319,7 @@ ANY_ITEMS = {
     "code_inline": parse_tag,
     "link_open": parse_link,
     "image": parse_image,
+    "table_open" : parse_table,
 }
 IGNORED_ITEMS = [
     "hr",

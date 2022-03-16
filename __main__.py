@@ -121,6 +121,7 @@ def main():
     generate_feed(config, reversed(posts[-config["feed"]["size"]:]))
     
     #TODO: sign stuff
+    
     for social in config["socials"]:
         if social.name == "E-Mail":
             key = social.url.split("/")[-1].split(".")[0]

@@ -1,5 +1,3 @@
-#TODO: tables
-
 class Element:
     pass
 
@@ -94,3 +92,20 @@ class Image(Element):
         
     def __repr__(self):
         return f"Image(src={self.src}, alt={self.alt})"
+
+class Th(list, Element):
+    pass
+
+class Td(list, Element):
+    pass
+
+class Trow(list, Element):
+    pass
+
+class Table(Element):
+    def __init__(self):
+        self.head = None
+        self.body = []
+        
+    def __repr__(self):
+        return f"Table(head={self.head}, body={self.body})"
