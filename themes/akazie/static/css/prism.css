@@ -64,7 +64,7 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
-	padding: .1em .3em .15em;
+	padding: .05em .3em .05em;
 	white-space: normal;
 	font-size: 1em;
 	background: rgba(0, 0, 0, 0.25);

@@ -145,3 +145,7 @@ body {
 img.figure {
     max-width: 100%;
 }
+
+.heading {
+    margin-top: 1em;
+}

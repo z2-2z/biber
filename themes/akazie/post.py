@@ -10,7 +10,7 @@ used_images = set()
 used_plugins = set()
 
 def heading_to_html(heading):
-    fmt_open_tag = "<h{}>"
+    fmt_open_tag = '<h{} class="heading">'
     fmt_close_tag = "</h{}>"
     
     ret = [
